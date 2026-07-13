@@ -1,0 +1,27 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Testimonial</h1>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-4">
+            <% if (testimonials.length === 0) { %>
+                <p class="text-center text-muted">No testimonials yet. Run <code>npm run seed</code> to add sample data.</p>
+            <% } %>
+            <% testimonials.forEach(function(t) { %>
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-light rounded p-4 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/img/<%= t.photo %>" class="rounded-circle me-3" style="width:60px;height:60px;object-fit:cover;" alt="<%= t.name %>">
+                            <div>
+                                <h5 class="mb-0"><%= t.name %></h5>
+                                <small class="text-muted"><%= t.profession %></small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"<%= t.message %>"</p>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>

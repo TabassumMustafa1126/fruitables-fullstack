@@ -1,0 +1,26 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Our Blog</h1>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-4">
+            <% if (posts.length === 0) { %>
+                <p class="text-center text-muted py-5">No blog posts yet. Add some from the admin panel at <code>/admin/blog</code>.</p>
+            <% } %>
+            <% posts.forEach(function(post) { %>
+                <div class="col-md-6 col-lg-4 d-flex">
+                    <div class="rounded border h-100 w-100 overflow-hidden d-flex flex-column">
+                        <img src="/img/<%= post.image %>" class="img-fluid w-100" style="height: 200px; object-fit: cover;" alt="<%= post.title %>">
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <small class="text-muted"><%= post.author %> &middot; <%= post.createdAt.toDateString() %></small>
+                            <h5 class="mt-2"><%= post.title %></h5>
+                            <p class="text-muted"><%= post.excerpt %></p>
+                            <a href="/blog/<%= post._id %>" class="btn btn-outline-primary rounded-pill px-4 mt-auto align-self-start">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>

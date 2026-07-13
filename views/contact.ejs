@@ -1,0 +1,50 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Contact Us</h1>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <% if (success) { %>
+            <div class="alert alert-success">Thanks! Your message has been saved and we'll get back to you soon.</div>
+        <% } %>
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-danger">
+                <ul class="mb-0"><% errors.forEach(function(msg) { %><li><%= msg %></li><% }); %></ul>
+            </div>
+        <% } %>
+
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <form action="/contact" method="POST" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" value="<%= formData.name || '' %>" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="<%= formData.email || '' %>" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Subject</label>
+                        <input type="text" name="subject" class="form-control" value="<%= formData.subject || '' %>" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Message</label>
+                        <textarea name="message" class="form-control" rows="5" required><%= formData.message || '' %></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 py-2">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <div class="bg-light rounded p-4 h-100">
+                    <h5 class="mb-3">Get in touch</h5>
+                    <p><i class="fas fa-map-marker-alt me-2 text-primary"></i>Main Boulevard, Lahore, Pakistan</p>
+                    <p><i class="fas fa-envelope me-2 text-primary"></i>info@fruitables.pk</p>
+                    <p><i class="fas fa-phone me-2 text-primary"></i>+92 300 1234567</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

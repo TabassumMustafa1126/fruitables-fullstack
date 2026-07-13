@@ -1,0 +1,45 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6"><%= post && post._id ? 'Edit Blog Post' : 'Add Blog Post' %></h1>
+</div>
+
+<div class="container-fluid py-4">
+    <div class="container" style="max-width: 700px;">
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-danger">
+                <ul class="mb-0"><% errors.forEach(function(msg) { %><li><%= msg %></li><% }); %></ul>
+            </div>
+        <% } %>
+
+        <form
+            action="<%= post && post._id ? '/admin/blog/' + post._id + '?_method=PUT' : '/admin/blog' %>"
+            method="POST"
+            class="row g-3"
+        >
+            <div class="col-12">
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" value="<%= post ? post.title : '' %>" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Image filename</label>
+                <input type="text" name="image" class="form-control" value="<%= post ? post.image : '' %>" placeholder="e.g. hero-img-1.png" required>
+                <small class="text-muted">File must already exist in <code>public/img/</code>.</small>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Author</label>
+                <input type="text" name="author" class="form-control" value="<%= post ? post.author : 'Fruitables Team' %>">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Excerpt (short summary shown on the blog list)</label>
+                <textarea name="excerpt" class="form-control" rows="2" required><%= post ? post.excerpt : '' %></textarea>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Full Content</label>
+                <textarea name="content" class="form-control" rows="8" required><%= post ? post.content : '' %></textarea>
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><%= post && post._id ? 'Save Changes' : 'Create Post' %></button>
+                <a href="/admin/blog" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

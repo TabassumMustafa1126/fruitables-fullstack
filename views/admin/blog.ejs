@@ -1,0 +1,45 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Admin - Manage Blog</h1>
+</div>
+
+<div class="container-fluid py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">All Posts (<%= posts.length %>)</h4>
+            <a href="/admin/blog/new" class="btn btn-primary rounded-pill px-4"><i class="fa fa-plus me-2"></i>Add New Post</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                        <th style="width: 160px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (posts.length === 0) { %>
+                        <tr><td colspan="5" class="text-center text-muted py-4">No posts yet. Click "Add New Post" to create one.</td></tr>
+                    <% } %>
+                    <% posts.forEach(function(p) { %>
+                        <tr>
+                            <td><img src="/img/<%= p.image %>" style="width:50px;height:50px;object-fit:cover;" class="rounded" alt="<%= p.title %>"></td>
+                            <td><%= p.title %></td>
+                            <td><%= p.author %></td>
+                            <td><%= p.createdAt.toDateString() %></td>
+                            <td>
+                                <a href="/admin/blog/<%= p._id %>/edit" class="btn btn-sm btn-outline-secondary me-1"><i class="fa fa-pen"></i></a>
+                                <form action="/admin/blog/<%= p._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this post?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

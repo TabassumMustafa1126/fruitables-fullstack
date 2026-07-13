@@ -1,0 +1,117 @@
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Fresh Fruits Shop</h1>
+</div>
+<!-- Page Header End -->
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <form action="/shop" method="GET" class="position-relative mb-4">
+                    <% if (activeCategory !== 'all') { %><input type="hidden" name="category" value="<%= activeCategory %>"><% } %>
+                    <input type="text" name="search" class="form-control py-3 px-4" placeholder="keywords" value="<%= search %>">
+                    <button type="submit" class="btn btn-primary position-absolute" style="top: 0; right: 0; height: 100%;"><i class="fa fa-search"></i></button>
+                </form>
+
+                <h5 class="mb-3">Categories</h5>
+                <ul class="list-unstyled mb-4">
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <a href="/shop" class="text-decoration-none <%= activeCategory === 'all' ? 'text-primary fw-bold' : 'text-dark' %>">All Products</a>
+                        <span class="text-muted">(<%= categoryCounts.fruit + categoryCounts.vegetable %>)</span>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <a href="/shop?category=fruit" class="text-decoration-none <%= activeCategory === 'fruit' ? 'text-primary fw-bold' : 'text-dark' %>"><i class="fa fa-apple-alt text-primary me-2"></i>Fruits</a>
+                        <span class="text-muted">(<%= categoryCounts.fruit %>)</span>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <a href="/shop?category=vegetable" class="text-decoration-none <%= activeCategory === 'vegetable' ? 'text-primary fw-bold' : 'text-dark' %>"><i class="fa fa-carrot text-primary me-2"></i>Vegetables</a>
+                        <span class="text-muted">(<%= categoryCounts.vegetable %>)</span>
+                    </li>
+                </ul>
+
+                <!-- Price + Additional filters (submitted together) -->
+                <form action="/shop" method="GET">
+                    <% if (activeCategory !== 'all') { %><input type="hidden" name="category" value="<%= activeCategory %>"><% } %>
+                    <% if (search) { %><input type="hidden" name="search" value="<%= search %>"><% } %>
+
+                    <h5 class="mb-3">Max Price</h5>
+                    <input type="range" class="form-range" name="maxPrice" min="0" max="<%= priceCeiling %>"
+                           value="<%= maxPrice || priceCeiling %>"
+                           oninput="document.getElementById('maxPriceLabel').innerText = 'Rs ' + this.value">
+                    <p class="mb-4">Up to <span id="maxPriceLabel">Rs <%= maxPrice || priceCeiling %></span></p>
+
+                    <h5 class="mb-3">Additional</h5>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="organic" value="1" id="filterOrganic" <%= organic ? 'checked' : '' %>>
+                        <label class="form-check-label" for="filterOrganic">Organic</label>
+                    </div>
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" name="onSale" value="1" id="filterOnSale" <%= onSale ? 'checked' : '' %>>
+                        <label class="form-check-label" for="filterOnSale">On Sale / Discount</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary rounded-pill w-100 mb-5">Apply Filters</button>
+                </form>
+
+                <h5 class="mb-3">Featured Products</h5>
+                <% featuredProducts.forEach(function(fp) { %>
+                    <a href="/shop/<%= fp._id %>" class="d-flex align-items-center gap-3 mb-3 text-decoration-none text-dark">
+                        <img src="/img/<%= fp.image %>" style="width:60px;height:60px;object-fit:cover;" class="rounded" alt="<%= fp.name %>">
+                        <div>
+                            <p class="mb-1"><%= fp.name %></p>
+                            <div class="mb-1">
+                                <% for (let s = 0; s < 5; s++) { %>
+                                    <i class="fa fa-star fa-xs <%= s < Math.round(fp.rating) ? 'text-secondary' : 'text-black-50' %>"></i>
+                                <% } %>
+                            </div>
+                            <p class="mb-0 fw-bold">Rs <%= fp.price.toFixed(0) %></p>
+                        </div>
+                    </a>
+                <% }); %>
+
+                <a href="/shop">
+                    <img src="/img/banner-fruits.jpg" class="img-fluid rounded mt-3" alt="Fresh Fruits Banner">
+                </a>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    <% if (products.length === 0) { %>
+                        <p class="text-center text-muted py-5">No products found matching your filters. Try clearing some filters, or run <code>npm run seed</code> to populate the database.</p>
+                    <% } %>
+                    <% products.forEach(function(item) { %>
+                        <div class="col-md-6 col-lg-4 d-flex">
+                            <div class="rounded position-relative fruite-item h-100 w-100 d-flex flex-column">
+                                <div class="fruite-img"><img src="/img/<%= item.image %>" class="img-fluid w-100 rounded-top" style="height: 200px; object-fit: cover;" alt="<%= item.name %>"></div>
+                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute text-capitalize" style="top: 10px; left: 10px;"><%= item.category %></div>
+                                <div class="p-4 border border-secondary border-top-0 rounded-bottom d-flex flex-column flex-grow-1">
+                                    <a href="/shop/<%= item._id %>" class="text-decoration-none text-dark"><h4><%= item.name %></h4></a>
+                                    <p><%= item.description.slice(0, 50) %>...</p>
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between flex-lg-wrap mb-3">
+                                            <p class="text-dark fs-5 fw-bold mb-0">Rs <%= item.price.toFixed(0) %> / <%= item.unit %></p>
+                                            <form action="/cart/add/<%= item._id %>" method="POST">
+                                                <button class="btn border border-secondary rounded-pill px-3 text-primary" type="submit"><i class="fa fa-shopping-bag me-2 text-primary"></i>Add</button>
+                                            </form>
+                                        </div>
+                                        <a href="/shop/<%= item._id %>" class="btn btn-primary rounded-pill w-100">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <% if (hasMore) { %>
+                    <div class="text-center mt-5">
+                        <a href="?category=<%= activeCategory !== 'all' ? activeCategory : '' %>&search=<%= search %>&maxPrice=<%= maxPrice %>&organic=<%= organic ? '1' : '' %>&onSale=<%= onSale ? '1' : '' %>&limit=<%= limit + 6 %>"
+                           class="btn btn-primary rounded-pill px-5 py-3">View More</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

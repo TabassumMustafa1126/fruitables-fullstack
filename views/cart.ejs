@@ -1,0 +1,89 @@
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Shopping Cart</h1>
+</div>
+<!-- Page Header End -->
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <% if (cart.length === 0) { %>
+            <div class="text-center py-5">
+                <p class="fs-5 text-muted">Your cart is empty.</p>
+                <a href="/shop" class="btn btn-primary rounded-pill px-4 py-2">Continue Shopping</a>
+            </div>
+        <% } else { %>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% cart.forEach(function(item) { %>
+                            <tr class="text-center">
+                                <td class="d-flex align-items-center gap-3 text-start">
+                                    <img src="/img/<%= item.image %>" style="width:60px;height:60px;object-fit:cover;" class="rounded" alt="<%= item.name %>">
+                                    <span><%= item.name %></span>
+                                </td>
+                                <td>Rs <%= item.price.toFixed(0) %></td>
+                                <td style="max-width: 120px; margin: 0 auto;">
+                                    <form action="/cart/update/<%= item.productId %>" method="POST" class="d-flex">
+                                        <input type="number" name="quantity" value="<%= item.quantity %>" min="1" class="form-control text-center">
+                                        <button type="submit" class="btn btn-outline-secondary ms-1">Set</button>
+                                    </form>
+                                </td>
+                                <td>Rs <%= (item.price * item.quantity).toFixed(0) %></td>
+                                <td>
+                                    <form action="/cart/remove/<%= item.productId %>" method="POST">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row justify-content-end">
+                <div class="col-md-5 col-lg-4">
+                    <div class="bg-light rounded p-4 mb-3">
+                        <h5 class="mb-3">Have a Coupon?</h5>
+                        <% if (typeof couponError !== 'undefined' && couponError) { %>
+                            <div class="alert alert-danger py-2 px-3 small mb-3"><%= couponError %></div>
+                        <% } %>
+                        <% if (coupon) { %>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Applied: <strong><%= coupon.code %></strong></span>
+                                <form action="/cart/remove-coupon" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                </form>
+                            </div>
+                        <% } else { %>
+                            <form action="/cart/apply-coupon" method="POST" class="d-flex gap-2">
+                                <input type="text" name="code" class="form-control text-uppercase" placeholder="Enter coupon code" required>
+                                <button type="submit" class="btn btn-secondary rounded-pill px-3">Apply</button>
+                            </form>
+                        <% } %>
+                    </div>
+
+                    <div class="bg-light rounded p-4">
+                        <h4 class="mb-4">Cart Summary</h4>
+                        <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span>Rs <%= subtotal.toFixed(0) %></span></div>
+                        <% if (discount > 0) { %>
+                            <div class="d-flex justify-content-between mb-2 text-success"><span>Discount<% if (coupon) { %> (<%= coupon.code %>)<% } %></span><span>- Rs <%= discount.toFixed(0) %></span></div>
+                        <% } %>
+                        <div class="d-flex justify-content-between mb-2"><span>Shipping</span><span>Rs <%= shipping.toFixed(0) %></span></div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4 fw-bold fs-5"><span>Total</span><span>Rs <%= total.toFixed(0) %></span></div>
+                        <a href="/checkout" class="btn btn-primary rounded-pill w-100 py-2">Proceed to Checkout</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>

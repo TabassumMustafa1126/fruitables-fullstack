@@ -1,0 +1,16 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Order Confirmed</h1>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container text-center">
+        <i class="fa fa-check-circle text-primary" style="font-size: 4rem;"></i>
+        <h2 class="mt-4 mb-3">Thank you, <%= order.customerName %>!</h2>
+        <p class="text-muted mb-1">Your order <strong>#<%= order._id %></strong> has been placed successfully.</p>
+        <% if (order.couponCode && order.discountAmount > 0) { %>
+            <p class="text-success mb-1">Coupon <strong>"<%= order.couponCode %>"</strong> applied - you saved Rs <%= order.discountAmount.toFixed(0) %>!</p>
+        <% } %>
+        <p class="text-muted mb-4">Total charged: <strong>Rs <%= order.totalAmount.toFixed(0) %></strong> (<%= order.paymentMethod.toUpperCase() %>)</p>
+        <a href="/shop" class="btn btn-primary rounded-pill px-4 py-2">Continue Shopping</a>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Register</h1>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container" style="max-width: 450px;">
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-danger">
+                <ul class="mb-0"><% errors.forEach(function(msg) { %><li><%= msg %></li><% }); %></ul>
+            </div>
+        <% } %>
+
+        <form action="/register" method="POST" class="row g-3">
+            <div class="col-12">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-control" value="<%= formData.name || '' %>" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="<%= formData.email || '' %>" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" minlength="6" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirmPassword" class="form-control" minlength="6" required>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary rounded-pill w-100 py-2">Create Account</button>
+            </div>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Already have an account? <a href="/login">Login here</a>
+        </p>
+    </div>
+</div>

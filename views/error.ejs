@@ -1,0 +1,14 @@
+<div class="container-fluid page-header py-5 mb-5">
+    <h1 class="text-center text-white display-6">Error <%= statusCode %></h1>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container text-center">
+        <p class="fs-5"><%= message %></p>
+        <a href="/" class="btn btn-primary rounded-pill px-4 py-2 mt-3">Go Home</a>
+
+        <% if (showStack) { %>
+            <pre class="text-start bg-light p-3 mt-4 rounded" style="font-size: 12px; overflow-x: auto;"><%= stack %></pre>
+        <% } %>
+    </div>
+</div>
